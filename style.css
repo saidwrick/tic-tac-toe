@@ -8,18 +8,98 @@ body{
     background-color: rgb(255, 255, 255);
     display:flex;
     align-items: center;
+    flex-direction: column;
 }
 
+header{
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    align-self: flex-start;
+    font-weight: bold;
+    padding: 50px 50px 30px 50px;
+    height: 145px;
+    align-items: center;
+}
+
+.title{
+    font-size: 45px;
+    font-weight: bold;
+    letter-spacing: -2px;
+    white-space:nowrap;
+    margin-left: auto;
+    padding-left: 25px;
+}
+
+.player-container{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+}
+
+.player-prompt{
+    display: flex;
+    align-items: center;
+    white-space:nowrap;
+    height: 23px;
+}
+
+input{
+    all: unset;
+    border-bottom: 1px solid black;
+    padding: 0px 5px 0px 5px;
+    font-size: 18px;
+    width: 80px;
+    margin: 0px 10px 0px 5px;
+    text-align: center;
+}
+
+.player-prompt>button{
+    all: unset;
+    border: 1px solid black;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.player-prompt>button:hover{
+    background-color: rgb(214, 214, 214);
+    cursor: pointer;
+}
+
+.reset{
+    all:unset;
+    font-size: 16px;
+    color:white;
+    background-color: black;
+    text-align: center;
+    border-radius: 8px;
+    padding: 3px 10px;
+    margin-left: 35px;
+    width: 74px;
+    height: 54px;
+    flex: 0;
+}
+
+.reset:hover{
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    cursor: pointer;
+}
 .container{
     background-color: rgb(36, 36, 36);
-    height: 70vh;
-    width: 70vh;
+    height: 60vh;
+    width: 60vh;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    margin-left: auto;
-    margin-right: auto;
+    margin-top: 45px;
+    margin-bottom: 10px;
     gap: 10px;
+    min-height: 250px;
+    min-width: 250px;
 }
 
 .square{
@@ -27,11 +107,32 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 50px;
-    font-size: 18vh;
+    font-size: 45px;
+    font-size: 13vh;
     user-select: none;
 }
 
 .square:hover{
     cursor: pointer;
+}
+
+.square.grey:hover{
+    cursor: not-allowed;
+}
+
+.end-banner{
+    background-color: rgba(0, 0, 0, 0.897);
+    position: fixed;
+    width: 100%;
+    top: 35%;
+    height: 200px;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    font-size: 56px;
+    font-size: 5vw;
+    font-weight: bold;
+    visibility: hidden;
+    white-space: nowrap;
 }

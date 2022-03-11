@@ -5,17 +5,53 @@ const gameBoard = (() => {
         ['g', 'h', 'i']];
 
     const container = document.querySelector(".container");
+    
+    const endBanner = document.querySelector(".end-banner");
 
-    for (let i = 0; i < 3; i++){
-        for (let j = 0; j < 3; j++){
-            let square = document.createElement("div");
-            square.classList.add("square");
-            square.setAttribute('data-x', i);
-            square.setAttribute('data-y', j);
-            square.addEventListener('click', function(){
-                playMove("X", square);
-            })
-            container.appendChild(square);
+    const resetButton = document.querySelector(".reset");
+    resetButton.addEventListener('click', function(){
+        if (playGame.checkGameStart() == true){
+            endBanner.style.visibility = "hidden";
+            playGame.gameStart();
+        }
+    })
+
+    const newBoard = () => {
+        container.innerHTML = "";
+
+        board = [
+            ['a', 'b', 'c'],
+            ['d', 'e', 'f'],
+            ['g', 'h', 'i']];
+
+        for (let i = 0; i < 3; i++){
+            for (let j = 0; j < 3; j++){
+                let square = document.createElement("div");
+                square.classList.add("square");
+                square.setAttribute('data-x', i);
+                square.setAttribute('data-y', j);
+                square.addEventListener('click', function(){
+
+                    playMove(playGame.currentPlayer().getMove(), square);
+
+                    if (gameWin() == true){
+                        endBanner.innerHTML = (playGame.currentPlayer().getName() + " wins!");
+                        endBanner.style.visibility = "visible";
+                    }
+                    else if (gameDraw() == true){
+                        endBanner.innerHTML = ("Draw!");
+                        endBanner.style.visibility = "visible";
+                        playGame.getPlayers()[1].switchTurn();
+                        playGame.getPlayers()[0].switchTurn();
+                    }
+                    else{
+                        playGame.getPlayers()[1].switchTurn();
+                        playGame.getPlayers()[0].switchTurn();
+                    }
+                })
+
+                container.appendChild(square);
+            }
         }
     }
 
@@ -26,13 +62,11 @@ const gameBoard = (() => {
         }
     }
 
-    const gameEnd = () => {
+    const gameWin = () => {
         if (rowsWin() || columnsWin() || diagonalWin()){
-            console.log("true");
             return true;
         }
         else{
-            console.log("false");
             return false;
         }
     }
@@ -74,6 +108,65 @@ const gameBoard = (() => {
         return true;
     }
 
-    return {gameEnd, gameDraw
-    };
+    return {gameWin, gameDraw, newBoard};
   })();
+
+  const Player = (playerName, move, currentTurn) => {
+    const getName = () => playerName;
+    const getMove = () => move;
+    const getCurrentTurn = () => {return currentTurn};
+    const switchTurn = () => {
+        currentTurn = currentTurn !== true;
+    }
+    return {getName, getMove, getCurrentTurn, switchTurn};
+  }
+
+const playGame = (() => {
+    let players = [];
+    const playerOneEnter = document.querySelector(".player-1-button");
+    playerOneEnter.addEventListener('click',function(){
+        if (playerOneEnter.previousElementSibling.value != ""){
+            const playerOne = Player (playerOneEnter.previousElementSibling.value, "X", true)
+            players.push(playerOne);
+            playerOneEnter.parentElement.innerHTML = playerOne.getName() + " [" + playerOne.getMove()+"]";
+            if (checkGameStart() == true){
+                gameStart();
+            }
+        };
+    })
+    const playerTwoEnter = document.querySelector(".player-2-button");
+    playerTwoEnter.addEventListener('click',function(){
+        if (playerTwoEnter.previousElementSibling.value != ""){
+            const playerTwo = Player (playerTwoEnter.previousElementSibling.value, "O", false)
+            players.push(playerTwo);
+            playerTwoEnter.parentElement.innerHTML = playerTwo.getName() + " [" + playerTwo.getMove()+"]";
+            if (checkGameStart() == true){
+                gameStart();
+            }
+        };
+    })
+
+    const checkGameStart = () =>{
+        if(players.length > 1){
+            return true;
+        }
+    }
+
+    const gameStart = () => {
+        gameBoard.newBoard();
+    }
+
+    const currentPlayer = () => {
+        let current = "";
+        players.forEach(e =>{
+            if (e.getCurrentTurn()==true){
+                current = e;
+            }
+        })
+        return current;
+    }
+
+    const getPlayers = () => players;
+    return{getPlayers, currentPlayer, checkGameStart, gameStart};
+
+})();
